@@ -1,4 +1,4 @@
-const displayStarredRepos = document.getElementById('display-starred-repos')
+const starredReposEl = document.getElementById('display-starred-repos')
 
 async function searchUser(username) {
     const response = await fetch(`https://api.github.com/users/${username}`)
@@ -12,12 +12,19 @@ async function searchUser(username) {
     }
 }
 
-searchUser('sonianb').then(console.log);
+// searchUser('sonianb').then(console.log);
 
 async function getRepos(username) {
     const response = await fetch(`https://api.github.com/users/${username}/starred`)
     const starredRepos = await response.json();
 
+    const starredReposName = starredRepos.forEach(starredRepo => {
+        const newDiv = document.createElement('div');
+        newDiv.innerText = starredRepo.name;
+        starredReposEl.appendChild(newDiv);
+    });
+
+    console.log(starredReposName);
 
     const totalStarred = starredRepos.length;
     if (!response.ok) {
