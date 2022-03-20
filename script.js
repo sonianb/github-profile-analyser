@@ -24,6 +24,7 @@ async function getStarredRepos(username) {
         throw new Error(message);
     }
     else {
+        starredReposEl.innerHTML = "";
         const numberReposContainer = document.createElement('div');
         numberReposContainer.innerText = `${username} has starred ${totalStarred} repositories:`
         starredReposEl.appendChild(numberReposContainer);
