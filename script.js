@@ -1,4 +1,7 @@
-const starredReposEl = document.getElementById('display-starred-repos')
+const starredReposEl = document.getElementById('display-starred-repos');
+const formInput = document.getElementById('profile-search');
+const searchBtn = document.getElementById('search-btn');
+const form = document.querySelector('form');
 
 async function searchUser(username) {
     const response = await fetch(`https://api.github.com/users/${username}`)
@@ -14,17 +17,11 @@ async function searchUser(username) {
 
 // searchUser('sonianb').then(console.log);
 
-async function getRepos(username) {
+async function getStarredRepos(username) {
     const response = await fetch(`https://api.github.com/users/${username}/starred`)
     const starredRepos = await response.json();
 
-    const starredReposName = starredRepos.forEach(starredRepo => {
-        const newDiv = document.createElement('div');
-        newDiv.innerText = starredRepo.name;
-        starredReposEl.appendChild(newDiv);
-    });
-
-    console.log(starredReposName);
+    // console.log(starredReposName);
 
     const totalStarred = starredRepos.length;
     if (!response.ok) {
@@ -32,9 +29,23 @@ async function getRepos(username) {
         throw new Error(message);
     }
     else {
-        return `${username} has starred ${totalStarred} repos: 
-        `;
+        const newElem = document.createElement('div');
+        newElem.innerText = `${username} has starred ${totalStarred} repositories:`
+        starredReposEl.appendChild(newElem);
+
+        starredRepos.forEach(starredRepo => {
+            const newDiv = document.createElement('div');
+            newDiv.innerText = starredRepo.full_name;
+            starredReposEl.appendChild(newDiv);
+        });
     }
 }
 
-getRepos('kmj673 ').then(console.log);
+searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchUser(formInput.value)
+    getStarredRepos(formInput.value)
+})
+
+
+// getRepos('sonianb').then(console.log);
