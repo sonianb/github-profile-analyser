@@ -70,7 +70,7 @@ function createPieChart(eventList) {
         }
     });
     const nbPullRequests = counter;
-    const nbIssues = eventList.filter(event => event.type === "IssuesEvent").length;
+    const nbIssuesOpened = eventList.filter(event => event['payload'].action === "opened").length
     const nbPushes = eventList.filter(event => event.type === "PushEvent").length;
 
     const config = {
@@ -78,13 +78,13 @@ function createPieChart(eventList) {
         data: {
             labels: [
                 'Pull Requests',
-                'Issues',
+                'Issues Opened',
                 'Pushes'],
             datasets: [{
                 label: 'Population',
                 data: [
                     nbPullRequests,
-                    nbIssues,
+                    nbIssuesOpened,
                     nbPushes
                 ],
                 backgroundColor: [
