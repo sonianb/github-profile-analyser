@@ -2,6 +2,7 @@ const starredReposEl = document.getElementById('display-starred-repos');
 const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
 const myChart = document.getElementById('myChart').getContext('2d');
+const recentActivityDate = document.getElementById('recent-activity-date')
 
 async function searchUser(username) {
     const response = await fetch(`https://api.github.com/users/${username}`)
@@ -43,6 +44,7 @@ searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     searchUser(formInput.value)
     getStarredRepos(formInput.value)
+    recentActivity(formInput.value).then((eventsData) => createPieChart(eventsData))
 })
 
 async function recentActivity(username) {
@@ -59,10 +61,16 @@ async function recentActivity(username) {
 }
 
 
-recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
+// recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
 function createPieChart(eventList) {
+    let lastElem = eventList.slice(-1)
+    let lastElemDate = new Date(lastElem[0].created_at);
+    console.log(lastElemDate)
+    recentActivityDate.innerText = `This is the recent activity, starting from ${lastElemDate.toLocaleDateString()}.`
+
     console.log(eventList);
+
     let counter = 0;
     eventList.forEach(event => {
         if (event.type === "PullRequestEvent") {
@@ -72,7 +80,7 @@ function createPieChart(eventList) {
     const nbPullRequests = counter;
 
     const nbIssuesTotal = eventList.filter(event => event.type === 'IssuesEvent');
-    const nbIssuesOpened = nbIssuesTotal.filter(event => event['payload'].action === "opened").length;
+    const nbIssuesOpened = nbIssuesTotal.filter(event => event.payload.action === "opened").length;
 
     const nbPushes = eventList.filter(event => event.type === "PushEvent").length;
 
@@ -101,4 +109,3 @@ function createPieChart(eventList) {
     }
     let activityPieChart = new Chart(myChart, config)
 };
-
