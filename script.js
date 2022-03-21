@@ -46,7 +46,7 @@ searchBtn.addEventListener('click', (e) => {
 })
 
 async function recentActivity(username) {
-    const response = await fetch(`https://api.github.com/users/${username}/events`)
+    const response = await fetch(`https://api.github.com/users/${username}/events?per_page=100`)
     const eventsData = await response.json();
 
     if (!response.ok) {
@@ -70,7 +70,10 @@ function createPieChart(eventList) {
         }
     });
     const nbPullRequests = counter;
-    const nbIssuesOpened = eventList.filter(event => event['payload'].action === "opened").length
+
+    const nbIssuesTotal = eventList.filter(event => event.type === 'IssuesEvent');
+    const nbIssuesOpened = nbIssuesTotal.filter(event => event['payload'].action === "opened").length;
+
     const nbPushes = eventList.filter(event => event.type === "PushEvent").length;
 
     const config = {
