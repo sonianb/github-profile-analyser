@@ -1,6 +1,7 @@
 const starredReposEl = document.getElementById('display-starred-repos');
 const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
+const myChart = document.getElementById('myChart').getContext('2d');
 
 async function searchUser(username) {
     const response = await fetch(`https://api.github.com/users/${username}`)
@@ -44,5 +45,57 @@ searchBtn.addEventListener('click', (e) => {
     getStarredRepos(formInput.value)
 })
 
+async function recentActivity(username) {
+    const response = await fetch(`https://api.github.com/users/${username}/events`)
+    const eventsData = await response.json();
 
-// getRepos('sonianb').then(console.log);
+    if (!response.ok) {
+        const message = `Oops, something went wrong: ${response.status}`;
+        throw new Error(message);
+    }
+    else {
+        return eventsData;
+    }
+}
+
+
+recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
+
+function createPieChart(eventList) {
+    console.log(eventList);
+    let counter = 0;
+    eventList.forEach(event => {
+        if (event.type === "PullRequestEvent") {
+            counter++
+        }
+    });
+    const nbPullRequests = counter;
+    const nbIssues = eventList.filter(event => event.type === "IssuesEvent").length;
+    const nbPushes = eventList.filter(event => event.type === "PushEvent").length;
+
+    const config = {
+        type: 'pie',
+        data: {
+            labels: [
+                'Pull Requests',
+                'Issues',
+                'Pushes'],
+            datasets: [{
+                label: 'Population',
+                data: [
+                    nbPullRequests,
+                    nbIssues,
+                    nbPushes
+                ],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 20
+            }]
+        }
+    }
+    let activityPieChart = new Chart(myChart, config)
+};
+
