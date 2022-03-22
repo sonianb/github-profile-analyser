@@ -61,12 +61,11 @@ async function recentActivity(username) {
 }
 
 
-// recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
+recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
 function createPieChart(eventList) {
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
-    console.log(lastElemDate)
     recentActivityDate.innerText = `This is the recent activity, starting from ${lastElemDate.toLocaleDateString()}.`
 
     console.log(eventList);
@@ -82,7 +81,13 @@ function createPieChart(eventList) {
     const nbIssuesTotal = eventList.filter(event => event.type === 'IssuesEvent');
     const nbIssuesOpened = nbIssuesTotal.filter(event => event.payload.action === "opened").length;
 
-    const nbPushes = eventList.filter(event => event.type === "PushEvent").length;
+    const pushEvents = eventList.filter(event => event.type === "PushEvent");
+
+    let commitsTotal = 0;
+    pushEvents.forEach(pushEvent => {
+        let commitSize = pushEvent.payload.size;
+        commitsTotal = commitSize + commitsTotal;
+    })
 
     const config = {
         type: 'pie',
@@ -90,13 +95,13 @@ function createPieChart(eventList) {
             labels: [
                 'Pull Requests',
                 'Issues Opened',
-                'Pushes'],
+                'Commits'],
             datasets: [{
                 label: 'Population',
                 data: [
                     nbPullRequests,
                     nbIssuesOpened,
-                    nbPushes
+                    commitsTotal
                 ],
                 backgroundColor: [
                     'rgb(255, 99, 132)',
