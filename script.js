@@ -3,6 +3,7 @@ const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
 const myChart = document.getElementById('myChart').getContext('2d');
 const recentActivityDate = document.getElementById('recent-activity-date')
+let activityPieChart;
 
 async function searchUser(username) {
     const response = await fetch(`https://api.github.com/users/${username}`)
@@ -61,9 +62,10 @@ async function recentActivity(username) {
 }
 
 
-recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
+// recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
 function createPieChart(eventList) {
+    //check if eventlist exists and is not empty
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
     recentActivityDate.innerText = `This is the recent activity, starting from ${lastElemDate.toLocaleDateString()}.`
@@ -112,5 +114,9 @@ function createPieChart(eventList) {
             }]
         }
     }
-    let activityPieChart = new Chart(myChart, config)
+
+    if (activityPieChart) {
+        activityPieChart.destroy()
+    }
+    activityPieChart = new Chart(myChart, config)
 };
