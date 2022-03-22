@@ -3,3 +3,7 @@
     flex-direction: column;
     gap: 5px;
 }
+
+.pie-container {
+    width: 25rem;
+}
