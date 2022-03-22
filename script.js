@@ -1,8 +1,11 @@
 const starredReposEl = document.getElementById('display-starred-repos');
 const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
+
 const myChart = document.getElementById('myChart').getContext('2d');
-const recentActivityDate = document.getElementById('recent-activity-date')
+const recentActivityDate = document.getElementById('recent-activity-date');
+const recentActivitiyMessage = document.getElementById('activity-message')
+
 let activityPieChart;
 
 async function searchUser(username) {
@@ -65,12 +68,16 @@ async function recentActivity(username) {
 // recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
 function createPieChart(eventList) {
-    //check if eventlist exists and is not empty
+    recentActivitiyMessage.innerHTML = "";
+    if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
+        activityPieChart.destroy();
+        recentActivityDate.innerText = "";
+        return recentActivitiyMessage.innerText = "No recent activity found :("
+    }
+
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
     recentActivityDate.innerText = `This is the recent activity, starting from ${lastElemDate.toLocaleDateString()}.`
-
-    console.log(eventList);
 
     let counter = 0;
     eventList.forEach(event => {
