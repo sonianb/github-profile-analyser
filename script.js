@@ -64,6 +64,24 @@ async function recentActivity(username) {
     }
 }
 
+async function reposPerLanguage(username) {
+    const response = await fetch(`https://api.github.com/users/${username}/repos`)
+    const reposData = await response.json();
+    if (!response.ok) {
+        const message = `Oops, something went wrong: ${response.status}`;
+        throw new Error(message);
+    }
+    else {
+        const counts = {};
+        reposData.map(repo => repo.language).forEach(x => {
+            counts[x] = (counts[x] || 0) + 1
+        });
+        return counts;
+    }
+}
+
+reposPerLanguage('sonianb').then(console.log);
+
 
 // recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
