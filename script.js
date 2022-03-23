@@ -73,9 +73,11 @@ async function reposPerLanguage(username) {
     }
     else {
         const counts = {};
-        reposData.map(repo => repo.language).forEach(x => {
-            counts[x] = (counts[x] || 0) + 1
-        });
+        reposData.map(repo => repo.language)
+            .filter(language => language)
+            .forEach(x => {
+                counts[x] = (counts[x] || 0) + 1
+            });
         return counts;
     }
 }
