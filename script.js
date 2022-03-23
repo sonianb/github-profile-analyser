@@ -1,12 +1,22 @@
+// *************
+// * Selectors *
+// *************
+
 const starredReposEl = document.getElementById('display-starred-repos');
 const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
 
 const myChart = document.getElementById('myChart').getContext('2d');
+const languageChart = document.getElementById('languageChart').getContext('2d');
 const recentActivityDate = document.getElementById('recent-activity-date');
-const recentActivitiyMessage = document.getElementById('activity-message')
+const recentActivitiyMessage = document.getElementById('activity-message');
 
 let activityPieChart;
+let languageBarChart;
+
+// *****************
+// * Functionality *
+// *****************
 
 async function searchUser(username) {
     const response = await fetch(`https://api.github.com/users/${username}`)
@@ -44,13 +54,6 @@ async function getStarredRepos(username) {
     }
 }
 
-searchBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    searchUser(formInput.value)
-    getStarredRepos(formInput.value)
-    recentActivity(formInput.value).then((eventsData) => createPieChart(eventsData))
-})
-
 async function recentActivity(username) {
     const response = await fetch(`https://api.github.com/users/${username}/events?per_page=100`)
     const eventsData = await response.json();
@@ -64,8 +67,38 @@ async function recentActivity(username) {
     }
 }
 
+async function reposPerLanguage(username) {
+    const response = await fetch(`https://api.github.com/users/${username}/repos`)
+    const reposData = await response.json();
+    if (!response.ok) {
+        const message = `Oops, something went wrong: ${response.status}`;
+        throw new Error(message);
+    }
+    else {
+        const counts = {};
+        reposData.map(repo => repo.language)
+            .filter(language => language)
+            .forEach(x => {
+                counts[x] = (counts[x] || 0) + 1
+            });
+        barChart(counts);
+        return counts;
+    }
+}
+
+searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchUser(formInput.value)
+    getStarredRepos(formInput.value)
+    reposPerLanguage(formInput.value)
+    recentActivity(formInput.value).then((eventsData) => createPieChart(eventsData))
+})
 
 // recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
+
+// **********
+// * Charts *
+// **********
 
 function createPieChart(eventList) {
     recentActivitiyMessage.innerHTML = "";
@@ -127,3 +160,40 @@ function createPieChart(eventList) {
     }
     activityPieChart = new Chart(myChart, config)
 };
+
+function barChart(counts) {
+    const config = {
+        type: 'bar',
+        data: {
+            labels: Object.keys(counts),
+            datasets: [{
+                label: 'Repos per Language',
+                data: Object.values(counts),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        },
+    }
+
+    if (languageBarChart) {
+        languageBarChart.destroy()
+    }
+    languageBarChart = new Chart(languageChart, config)
+}
