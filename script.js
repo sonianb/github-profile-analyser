@@ -11,6 +11,8 @@ const languageChart = document.getElementById('languageChart').getContext('2d');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
 
+const errorOutput = document.getElementById('error-output');
+
 let activityPieChart;
 let languageBarChart;
 
@@ -18,11 +20,20 @@ let languageBarChart;
 // * Functionality *
 // *****************
 
+async function callGithubAPI(apiUrl) {
+    return await fetch('https://api.github.com' + apiUrl, {
+        headers: {
+            authorization: "token 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"
+        }
+    })
+}
+
 async function searchUser(username) {
-    const response = await fetch(`https://api.github.com/users/${username}`)
+    const response = await callGithubAPI(`/users/${username}`)
     const usernameData = await response.json();
     if (!response.ok) {
         const message = `Oops, something went wrong: ${response.status}`;
+        errorOutput.innerText = `Can't find ${username}. Try again.`
         throw new Error(message);
     }
     else {
@@ -31,7 +42,7 @@ async function searchUser(username) {
 }
 
 async function getStarredRepos(username) {
-    const response = await fetch(`https://api.github.com/users/${username}/starred`)
+    const response = await callGithubAPI(`/users/${username}/starred`)
     const starredRepos = await response.json();
     console.log(starredRepos)
 
@@ -60,7 +71,7 @@ async function getStarredRepos(username) {
 }
 
 async function recentActivity(username) {
-    const response = await fetch(`https://api.github.com/users/${username}/events?per_page=100`)
+    const response = await callGithubAPI(`/users/${username}/events?per_page=100`)
     const eventsData = await response.json();
 
     if (!response.ok) {
@@ -73,7 +84,7 @@ async function recentActivity(username) {
 }
 
 async function reposPerLanguage(username) {
-    const response = await fetch(`https://api.github.com/users/${username}/repos`)
+    const response = await callGithubAPI(`/users/${username}/repos`)
     const reposData = await response.json();
     if (!response.ok) {
         const message = `Oops, something went wrong: ${response.status}`;
