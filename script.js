@@ -2,7 +2,7 @@
 // * Selectors *
 // *************
 
-const starredReposEl = document.getElementById('display-starred-repos');
+const starredReposEl = document.getElementById('starred-repos');
 const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
 
@@ -33,6 +33,7 @@ async function searchUser(username) {
 async function getStarredRepos(username) {
     const response = await fetch(`https://api.github.com/users/${username}/starred`)
     const starredRepos = await response.json();
+    console.log(starredRepos)
 
     const totalStarred = starredRepos.length;
     if (!response.ok) {
@@ -42,10 +43,14 @@ async function getStarredRepos(username) {
     else {
         starredReposEl.innerHTML = "";
         const numberReposContainer = document.createElement('div');
-        numberReposContainer.innerText = `${username} has starred ${totalStarred} repositories:`
+        numberReposContainer.innerText = `${username} has starred ${totalStarred} repositories`
         starredReposEl.appendChild(numberReposContainer);
 
         starredRepos.forEach(starredRepo => {
+            const starredRepoDescription = document.createElement('p');
+            starredRepoDescription.innerText = starredRepo.description;
+            starredReposEl.appendChild(starredRepoDescription);
+
             const starredReposLink = document.createElement('a');
             starredReposLink.innerText = starredRepo.full_name;
             starredReposLink.setAttribute('href', starredRepo.html_url)
