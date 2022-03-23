@@ -167,7 +167,7 @@ function barChart(counts) {
         data: {
             labels: Object.keys(counts),
             datasets: [{
-                label: 'My First Dataset',
+                label: 'Repos per Language',
                 data: Object.values(counts),
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
