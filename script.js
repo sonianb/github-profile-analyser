@@ -1,6 +1,13 @@
 // *************
 // * Selectors *
 // *************
+const userPhoto = document.getElementById('user-photo');
+const dateJoined = document.getElementById('date-joined');
+const nameUser = document.getElementById('usersname');
+const userFollowers = document.getElementById('user-followers');
+const userFollowing = document.getElementById('user-following');
+const userLocation = document.getElementById('user-location');
+const userPublicRepos = document.getElementById('public-repos');
 
 const starredReposEl = document.getElementById('starred-repos');
 const formInput = document.getElementById('profile-search');
@@ -39,13 +46,21 @@ async function searchUser(username) {
         throw new Error(message);
     }
     else {
-        const joinedGithub = new Date(usernameData.created_at).toLocaleDateString();
-        const profilePhoto = usernameData.avatar_url
         const name = usernameData.name;
+        nameUser.innerText = `Name: ${name}`
+        const joinedGithub = new Date(usernameData.created_at).toLocaleDateString();
+        dateJoined.innerText = `Joined: ${joinedGithub}`
+        const profilePhoto = usernameData.avatar_url
+
         const followers = usernameData.followers;
+        userFollowers.innerText = `Followers: ${followers}`
         const following = usernameData.following;
+        userFollowing.innerText = `Following: ${following}`
         const location = usernameData.location;
+        userLocation.innerText = `Location: ${location}`
         const publicRepos = usernameData.pubic_repos; //returns undefined
+        userPublicRepos.innerText = `Public repos: ${publicRepos}`
+
         const profileUrl = usernameData.url;
 
         console.log(publicRepos);
