@@ -8,6 +8,7 @@ const userFollowers = document.getElementById('user-followers');
 const userFollowing = document.getElementById('user-following');
 const userLocation = document.getElementById('user-location');
 const userPublicRepos = document.getElementById('public-repos');
+const userProfileUrl = document.getElementById('profile-url')
 
 const starredReposEl = document.getElementById('starred-repos');
 const formInput = document.getElementById('profile-search');
@@ -30,7 +31,7 @@ let languageBarChart;
 async function callGithubAPI(apiUrl) {
     return await fetch('https://api.github.com' + apiUrl, {
         headers: {
-            authorization: "token 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"
+            authorization: "token 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"
         }
     })
 }
@@ -46,25 +47,14 @@ async function searchUser(username) {
         throw new Error(message);
     }
     else {
-        const name = usernameData.name;
-        nameUser.innerText = `Name: ${name}`
-        const joinedGithub = new Date(usernameData.created_at).toLocaleDateString();
-        dateJoined.innerText = `Joined: ${joinedGithub}`
-        const profilePhoto = usernameData.avatar_url
-
-        const followers = usernameData.followers;
-        userFollowers.innerText = `Followers: ${followers}`
-        const following = usernameData.following;
-        userFollowing.innerText = `Following: ${following}`
-        const location = usernameData.location;
-        userLocation.innerText = `Location: ${location}`
-        const publicRepos = usernameData.pubic_repos; //returns undefined
-        userPublicRepos.innerText = `Public repos: ${publicRepos}`
-
-        const profileUrl = usernameData.url;
-
-        console.log(publicRepos);
-        return usernameData;
+        nameUser.innerText = `Name: ${usernameData.name}`
+        dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
+        userPhoto.src = usernameData.avatar_url;
+        userFollowers.innerText = `Followers: ${usernameData.followers}`
+        userFollowing.innerText = `Following: ${usernameData.following}`
+        userLocation.innerText = `Location: ${usernameData.location}`
+        userPublicRepos.innerText = `Public repos: ${usernameData.public_repos}`
+        userProfileUrl.setAttribute('href', usernameData.html_url);
     }
 }
 
