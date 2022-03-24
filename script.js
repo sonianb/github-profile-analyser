@@ -29,22 +29,35 @@ async function callGithubAPI(apiUrl) {
 }
 
 async function searchUser(username) {
+    errorOutput.innerHTML = "";
     const response = await callGithubAPI(`/users/${username}`)
     const usernameData = await response.json();
+    console.log(usernameData);
     if (!response.ok) {
         const message = `Oops, something went wrong: ${response.status}`;
         errorOutput.innerText = `Can't find ${username}. Try again.`
         throw new Error(message);
     }
     else {
+        const joinedGithub = new Date(usernameData.created_at).toLocaleDateString();
+        const profilePhoto = usernameData.avatar_url
+        const name = usernameData.name;
+        const followers = usernameData.followers;
+        const following = usernameData.following;
+        const location = usernameData.location;
+        const publicRepos = usernameData.pubic_repos; //returns undefined
+        const profileUrl = usernameData.url;
+
+        console.log(publicRepos);
         return usernameData;
     }
 }
 
+searchUser('sonianb').then(() => console.log);
+
 async function getStarredRepos(username) {
     const response = await callGithubAPI(`/users/${username}/starred`)
     const starredRepos = await response.json();
-    console.log(starredRepos)
 
     const totalStarred = starredRepos.length;
     if (!response.ok) {
@@ -170,11 +183,8 @@ function createPieChart(eventList) {
             }]
         }
     }
-
-    if (activityPieChart) {
-        activityPieChart.destroy()
-    }
     activityPieChart = new Chart(myChart, config)
+    //need to destroy charts after wrong username input 
 };
 
 function barChart(counts) {
