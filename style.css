@@ -1,3 +1,7 @@
+h1 {
+    text-align: center;
+}
+
 #display-starred-repos {
     display: flex;
     flex-direction: column;
@@ -6,4 +10,8 @@
 
 .pie-container {
     width: 25rem;
+}
+
+.hide {
+    display: none;
 }
