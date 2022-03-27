@@ -54,6 +54,10 @@ async function searchUser(username) {
         userLocation.innerText = `Location: ${usernameData.location}`
         userPublicRepos.innerText = `Public repos: ${usernameData.public_repos}`
         userProfileUrl.setAttribute('href', usernameData.html_url);
+
+        getStarredRepos(username);
+        reposPerLanguage(username);
+        recentActivity(username);
     } catch (error) {
         userInformation.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
@@ -99,9 +103,6 @@ async function reposPerLanguage(username) {
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     searchUser(formInput.value)
-    getStarredRepos(formInput.value)
-    reposPerLanguage(formInput.value)
-    recentActivity(formInput.value)
 })
 
 // recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
@@ -113,7 +114,7 @@ searchBtn.addEventListener('click', (e) => {
 function createPieChart(eventList) {
     recentActivitiyMessage.innerHTML = "";
     if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
-        recentActivityDate.innerText = "";
+        // recentActivityDate.innerText = "";
         return recentActivitiyMessage.innerText = "No recent activity found :("
     }
 
