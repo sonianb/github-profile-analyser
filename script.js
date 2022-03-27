@@ -1,6 +1,7 @@
 // *************
 // * Selectors *
 // *************
+const userInformation = document.getElementById('user-information')
 const userPhoto = document.getElementById('user-photo');
 const dateJoined = document.getElementById('date-joined');
 const nameUser = document.getElementById('usersname');
@@ -37,11 +38,13 @@ async function callGithubAPI(apiUrl) {
 }
 
 async function searchUser(username) {
+    userInformation.classList.remove('hide')
     errorOutput.innerHTML = "";
     const response = await callGithubAPI(`/users/${username}`)
     const usernameData = await response.json();
     console.log(usernameData);
     if (!response.ok) {
+        userInformation.classList.add('hide');
         const message = `Oops, something went wrong: ${response.status}`;
         errorOutput.innerText = `Can't find ${username}. Try again.`
         throw new Error(message);
@@ -57,8 +60,6 @@ async function searchUser(username) {
         userProfileUrl.setAttribute('href', usernameData.html_url);
     }
 }
-
-searchUser('sonianb').then(() => console.log);
 
 async function getStarredRepos(username) {
     const response = await callGithubAPI(`/users/${username}/starred`)

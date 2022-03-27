@@ -22,32 +22,33 @@
             <button id="search-btn">Search</button>
         </form>
         <p id="error-output"></p>
+        <section class="hide" id="user-information">
+            <section>
+                <img id="user-photo" alt="">
+                <div id="usersname"></div>
+                <div id="date-joined"></div>
+                <div id="user-followers"></div>
+                <div id="user-following"></div>
+                <div id="user-location"></div>
+                <div id="public-repos"></div>
+                <a id="profile-url" target="_blank">View profile</a>
+            </section>
 
-        <section id="user-informaion">
-            <img id="user-photo" alt="">
-            <div id="usersname"></div>
-            <div id="date-joined"></div>
-            <div id="user-followers"></div>
-            <div id="user-following"></div>
-            <div id="user-location"></div>
-            <div id="public-repos"></div>
-            <a id="profile-url" target="_blank">View profile</a>
-        </section>
+            <section id="recent-activity">
+                <div id="activity-message"></div>
+                <div class="pie-container">
+                    <h2 id="recent-activity-date"></h2>
+                    <canvas class="pie-chart" id="myChart"></canvas>
+                </div>
+            </section>
 
-        <section id="recent-activity">
-            <div id="activity-message"></div>
-            <div class="pie-container">
-                <h2 id="recent-activity-date"></h2>
-                <canvas class="pie-chart" id="myChart"></canvas>
-            </div>
-        </section>
+            <section id="popular-languages">
+                <canvas class="bar-chart" id="languageChart"></canvas>
+            </section>
 
-        <section id="popular-languages">
-            <canvas class="bar-chart" id="languageChart"></canvas>
-        </section>
-
-        <section>
-            <div id="starred-repos"></div>
+            <section>
+                <div id="starred-repos"></div>
+            </section>
         </section>
     </main>
 

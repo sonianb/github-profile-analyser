@@ -11,3 +11,7 @@ h1 {
 .pie-container {
     width: 25rem;
 }
+
+.hide {
+    display: none;
+}
