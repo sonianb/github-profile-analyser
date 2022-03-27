@@ -30,26 +30,22 @@ let languageBarChart;
 // *****************
 
 async function callGithubAPI(apiUrl) {
-    return await fetch('https://api.github.com' + apiUrl, {
+    const response = await fetch('https://api.github.com' + apiUrl, {
         headers: {
-            authorization: "token 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"
+            authorization: "token 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"
         }
-    })
+    });
+    if (!response.ok) {
+        throw new Error('Something went wrong ' + response.status);
+    }
+    return await response.json();
 }
 
 async function searchUser(username) {
     userInformation.classList.remove('hide')
     errorOutput.innerHTML = "";
-    const response = await callGithubAPI(`/users/${username}`)
-    const usernameData = await response.json();
-    console.log(usernameData);
-    if (!response.ok) {
-        userInformation.classList.add('hide');
-        const message = `Oops, something went wrong: ${response.status}`;
-        errorOutput.innerText = `Can't find ${username}. Try again.`
-        throw new Error(message);
-    }
-    else {
+    try {
+        const usernameData = await callGithubAPI(`/users/${username}`)
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
         userPhoto.src = usernameData.avatar_url;
@@ -58,67 +54,46 @@ async function searchUser(username) {
         userLocation.innerText = `Location: ${usernameData.location}`
         userPublicRepos.innerText = `Public repos: ${usernameData.public_repos}`
         userProfileUrl.setAttribute('href', usernameData.html_url);
+    } catch (error) {
+        userInformation.classList.add('hide');
+        errorOutput.innerText = `Can't find ${username}. Try again.`
     }
 }
 
 async function getStarredRepos(username) {
-    const response = await callGithubAPI(`/users/${username}/starred`)
-    const starredRepos = await response.json();
-
+    const starredRepos = await callGithubAPI(`/users/${username}/starred`)
     const totalStarred = starredRepos.length;
-    if (!response.ok) {
-        const message = `Oops, something went wrong: ${response.status}`;
-        throw new Error(message);
-    }
-    else {
-        starredReposEl.innerHTML = "";
-        const numberReposContainer = document.createElement('div');
-        numberReposContainer.innerText = `${username} has starred ${totalStarred} repositories`
-        starredReposEl.appendChild(numberReposContainer);
+    starredReposEl.innerHTML = "";
+    const numberReposContainer = document.createElement('div');
+    numberReposContainer.innerText = `${username} has starred ${totalStarred} repositories`
+    starredReposEl.appendChild(numberReposContainer);
 
-        starredRepos.forEach(starredRepo => {
-            const starredRepoDescription = document.createElement('p');
-            starredRepoDescription.innerText = starredRepo.description;
-            starredReposEl.appendChild(starredRepoDescription);
+    starredRepos.forEach(starredRepo => {
+        const starredRepoDescription = document.createElement('p');
+        starredRepoDescription.innerText = starredRepo.description;
+        starredReposEl.appendChild(starredRepoDescription);
 
-            const starredReposLink = document.createElement('a');
-            starredReposLink.innerText = starredRepo.full_name;
-            starredReposLink.setAttribute('href', starredRepo.html_url)
-            starredReposEl.appendChild(starredReposLink);
-        });
-    }
+        const starredReposLink = document.createElement('a');
+        starredReposLink.innerText = starredRepo.full_name;
+        starredReposLink.setAttribute('href', starredRepo.html_url)
+        starredReposEl.appendChild(starredReposLink);
+    });
 }
 
 async function recentActivity(username) {
-    const response = await callGithubAPI(`/users/${username}/events?per_page=100`)
-    const eventsData = await response.json();
-
-    if (!response.ok) {
-        const message = `Oops, something went wrong: ${response.status}`;
-        throw new Error(message);
-    }
-    else {
-        return eventsData;
-    }
+    const eventsData = await callGithubAPI(`/users/${username}/events?per_page=100`)
+    createPieChart(eventsData);
 }
 
 async function reposPerLanguage(username) {
-    const response = await callGithubAPI(`/users/${username}/repos`)
-    const reposData = await response.json();
-    if (!response.ok) {
-        const message = `Oops, something went wrong: ${response.status}`;
-        throw new Error(message);
-    }
-    else {
-        const counts = {};
-        reposData.map(repo => repo.language)
-            .filter(language => language)
-            .forEach(x => {
-                counts[x] = (counts[x] || 0) + 1
-            });
-        barChart(counts);
-        return counts;
-    }
+    const reposData = await callGithubAPI(`/users/${username}/repos`)
+    const counts = {};
+    reposData.map(repo => repo.language)
+        .filter(language => language)
+        .forEach(x => {
+            counts[x] = (counts[x] || 0) + 1
+        });
+    barChart(counts);
 }
 
 searchBtn.addEventListener('click', (e) => {
@@ -126,7 +101,7 @@ searchBtn.addEventListener('click', (e) => {
     searchUser(formInput.value)
     getStarredRepos(formInput.value)
     reposPerLanguage(formInput.value)
-    recentActivity(formInput.value).then((eventsData) => createPieChart(eventsData))
+    recentActivity(formInput.value)
 })
 
 // recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
@@ -138,7 +113,6 @@ searchBtn.addEventListener('click', (e) => {
 function createPieChart(eventList) {
     recentActivitiyMessage.innerHTML = "";
     if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
-        activityPieChart.destroy();
         recentActivityDate.innerText = "";
         return recentActivitiyMessage.innerText = "No recent activity found :("
     }
@@ -189,8 +163,10 @@ function createPieChart(eventList) {
             }]
         }
     }
+    if (activityPieChart) {
+        activityPieChart.destroy();
+    }
     activityPieChart = new Chart(myChart, config)
-    //need to destroy charts after wrong username input 
 };
 
 function barChart(counts) {
