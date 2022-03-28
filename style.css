@@ -1,5 +1,6 @@
 :root {
     box-sizing: border-box;
+    font-family: 'Oxygen', sans-serif;
     --primary-color: #F7D5C1;
     --secondary-color: #ABA8F7;
     --dark-purple: #6663AB;
@@ -49,11 +50,31 @@ form {
     border-left: 10px solid var(--neon-green);
 }
 
+.activity-grid {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 2fr 0.5fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        ". recent-activity popular-languages ."
+    ;
+    border-bottom: 10px solid var(--neon-green);
+}
+
+#recent-activity {
+    grid-area: recent-activity;
+    border-right: 10px solid var(--secondary-color);
+}
+
+#popular-languages {
+    display: flex;
+    align-items: center;
+    grid-area: popular-languages;
+}
+
 
 #display-starred-repos {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
 }
 
 .pie-container {

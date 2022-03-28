@@ -9,6 +9,9 @@
         integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap" rel="stylesheet">
     <title>GitHub Profile Analyser</title>
 </head>
 
@@ -16,8 +19,8 @@
     <main>
         <h1>GitHub Profile Analyser</h1>
         <form>
-            <label for="profile-search">Search for a profile:</label>
-            <input type="search" id="profile-search" name="q">
+            <label for="profile-search"></label>
+            <input type="search" id="profile-search" name="q" placeholder="Enter GitHub username...">
 
             <button id="search-btn">Search</button>
         </form>
@@ -36,17 +39,19 @@
                 </section>
             </div>
 
-            <section id="recent-activity">
-                <div id="activity-message"></div>
-                <div class="pie-container">
-                    <h2 id="recent-activity-date"></h2>
-                    <canvas class="pie-chart" id="myChart"></canvas>
-                </div>
-            </section>
+            <div class="activity-grid">
+                <section id="recent-activity">
+                    <div id="activity-message"></div>
+                    <div class="pie-container">
+                        <h2 id="recent-activity-date"></h2>
+                        <canvas class="pie-chart" id="myChart"></canvas>
+                    </div>
+                </section>
 
-            <section id="popular-languages">
-                <canvas class="bar-chart" id="languageChart"></canvas>
-            </section>
+                <section id="popular-languages">
+                    <canvas class="bar-chart" id="languageChart"></canvas>
+                </section>
+            </div>
 
             <section>
                 <div id="starred-repos"></div>
