@@ -22,6 +22,8 @@ const recentActivitiyMessage = document.getElementById('activity-message');
 
 const errorOutput = document.getElementById('error-output');
 
+
+
 let activityPieChart;
 let languageBarChart;
 
@@ -32,7 +34,7 @@ let languageBarChart;
 async function callGithubAPI(apiUrl) {
     const response = await fetch('https://api.github.com' + apiUrl, {
         headers: {
-            authorization: "token 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"
+            authorization: "token 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"
         }
     });
     if (!response.ok) {
