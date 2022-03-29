@@ -34,7 +34,7 @@ let languageBarChart;
 async function callGithubAPI(apiUrl) {
     const response = await fetch('https://api.github.com' + apiUrl, {
         headers: {
-            authorization: "token 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"
+            authorization: token
         }
     });
     if (!response.ok) {
