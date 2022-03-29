@@ -47,19 +47,17 @@ input[type=search]:focus {
     grid-template-rows: auto;
     grid-template-areas:
         ". user-photo-and-info . ";
-    border-top: 10px solid var(--secondary-color);
-    border-bottom: 10px solid var(--secondary-color);
 }
 
 #user-photo-and-info {
     grid-area: user-photo-and-info;
-    background-color: var(--secondary-color);
     display: flex;
     border: 10px solid var(--neon-green);
 }
 
 #user-grid-area {
     grid-area: user-grid-area;
+    min-width: max-content;
     max-width: 15rem;
     font-size: 1.3rem;
     padding: 1.4rem;
@@ -68,9 +66,9 @@ input[type=search]:focus {
 #user-photo {
     grid-area: user-photo;
     max-width: 14rem;
-    /* margin-left: auto; */
-    /* margin-right: 1rem; */
     padding: 1.4rem;
+    border-radius: 50%;
+    height: fit-content;
 
 }
 
@@ -81,7 +79,6 @@ input[type=search]:focus {
     grid-template-areas:
         ". recent-activity popular-languages ."
     ;
-    border-bottom: 10px solid var(--neon-green);
 }
 
 #recent-activity {
@@ -89,8 +86,7 @@ input[type=search]:focus {
     align-items: center;
     justify-content: center;
     grid-area: recent-activity;
-    border-left: 10px solid var(--neon-green);
-    border-right: 10px solid var(--secondary-color);
+    border: 10px solid var(--secondary-color);
     /* background-color: var(--dark-green); */
 }
 
@@ -99,14 +95,8 @@ input[type=search]:focus {
     /* background-color: var(--dark-purple); */
     display: flex;
     align-items: center;
-    border-right: 10px solid var(--neon-green);
+    border: 10px solid var(--secondary-color);
 }
-
-/* 
-#display-starred-repos {
-    display: flex;
-    align-items: center;
-} */
 
 #starred-repos-container {
     display: flex;
