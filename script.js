@@ -162,7 +162,7 @@ function createPieChart(eventList) {
                     '#6663AB',
                     '#ABA8F7'
                 ],
-                hoverOffset: 10
+                hoverOffset: 2
             }]
         }
     }

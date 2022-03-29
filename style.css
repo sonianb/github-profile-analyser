@@ -77,7 +77,7 @@ input[type=search]:focus {
 .activity-grid {
     display: grid;
     grid-template-columns: 0.5fr 2fr 2fr 0.5fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
     grid-template-areas:
         ". recent-activity popular-languages ."
     ;
@@ -102,11 +102,22 @@ input[type=search]:focus {
     border-right: 10px solid var(--neon-green);
 }
 
-
+/* 
 #display-starred-repos {
     display: flex;
     align-items: center;
+} */
+
+#starred-repos-container {
+    display: flex;
+    flex-flow: column;
+    padding: 16px;
+    font-size: 1.2rem;
+    border: 10px solid var(--secondary-color);
+    max-width: 40rem;
+    margin-top: 2rem;
 }
+
 
 .pie-container {
     width: 25rem;
