@@ -9,7 +9,8 @@
 }
 
 body {
-    background-color: var(--primary-color)
+    background-color: var(--primary-color);
+    margin: 0;
 }
 
 h1 {
@@ -42,17 +43,23 @@ input[type=search]:focus {
 
 #display-user {
     display: grid;
-    grid-template-columns: 1fr 0.5fr 0.5fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        ". user-photo user-grid-area . ";
+        ". user-photo-and-info . ";
     border-top: 10px solid var(--secondary-color);
     border-bottom: 10px solid var(--secondary-color);
 }
 
+#user-photo-and-info {
+    grid-area: user-photo-and-info;
+    background-color: var(--secondary-color);
+    display: flex;
+    border: 10px solid var(--neon-green);
+}
+
 #user-grid-area {
     grid-area: user-grid-area;
-    border-right: 10px solid var(--neon-green);
     max-width: 15rem;
     font-size: 1.3rem;
     padding: 1.4rem;
@@ -60,11 +67,11 @@ input[type=search]:focus {
 
 #user-photo {
     grid-area: user-photo;
-    max-width: 11rem;
-    margin-left: auto;
-    margin-right: 1rem;
+    max-width: 14rem;
+    /* margin-left: auto; */
+    /* margin-right: 1rem; */
     padding: 1.4rem;
-    border-left: 10px solid var(--neon-green);
+
 }
 
 .activity-grid {
