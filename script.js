@@ -151,18 +151,18 @@ function createPieChart(eventList) {
                 'Issues Opened',
                 'Commits'],
             datasets: [{
-                label: 'Population',
+                label: 'Recent Activity',
                 data: [
                     nbPullRequests,
                     nbIssuesOpened,
                     commitsTotal
                 ],
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
+                    '#71AB64',
+                    '#6663AB',
+                    '#ABA8F7'
                 ],
-                hoverOffset: 20
+                hoverOffset: 10
             }]
         }
     }
@@ -181,15 +181,16 @@ function barChart(counts) {
                 label: 'Repos per Language',
                 data: Object.values(counts),
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
+                    '#71AB64',
+                    '#ABA8F7',
+                    '#6663AB',
+                    '#A3F78F'
                 ],
                 borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
+                    '#71AB64',
+                    '#ABA8F7',
+                    '#6663AB',
+                    '#A3F78F'
                 ],
                 borderWidth: 1
             }]

@@ -85,14 +85,21 @@ input[type=search]:focus {
 }
 
 #recent-activity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     grid-area: recent-activity;
+    border-left: 10px solid var(--neon-green);
     border-right: 10px solid var(--secondary-color);
+    /* background-color: var(--dark-green); */
 }
 
 #popular-languages {
+    grid-area: popular-languages;
+    /* background-color: var(--dark-purple); */
     display: flex;
     align-items: center;
-    grid-area: popular-languages;
+    border-right: 10px solid var(--neon-green);
 }
 
 
