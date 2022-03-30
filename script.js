@@ -9,7 +9,8 @@ const userFollowers = document.getElementById('user-followers');
 const userFollowing = document.getElementById('user-following');
 const userLocation = document.getElementById('user-location');
 const userPublicRepos = document.getElementById('public-repos');
-const userProfileUrl = document.getElementById('profile-url')
+const userProfileUrl = document.getElementById('profile-url');
+const userTitle = document.getElementById('user-title')
 
 const starredReposEl = document.getElementById('starred-repos');
 const formInput = document.getElementById('profile-search');
@@ -49,17 +50,20 @@ async function searchUser(username) {
     userInformation.classList.remove('hide')
     errorOutput.innerHTML = "";
     try {
-        const usernameData = await callGithubAPI(`/users/${username}`)
-        //create an h2 'user information'
+        const usernameData = await callGithubAPI(`/users/${username}`);
+        userTitle.innerText = `User Information`
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
         userPhoto.src = usernameData.avatar_url;
         userFollowers.innerText = `Followers: ${usernameData.followers}`
         userFollowing.innerText = `Following: ${usernameData.following}`
-        userLocation.innerText = `Location: ${usernameData.location}`
         userPublicRepos.innerText = `Public repos: ${usernameData.public_repos}`
         userProfileUrl.setAttribute('href', usernameData.html_url);
-
+        if (usernameData.location) {
+            userLocation.innerText = `Location: ${usernameData.location}`
+        } else {
+            userLocation.innerText = "";
+        }
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
