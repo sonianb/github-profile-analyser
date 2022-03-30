@@ -17,8 +17,10 @@ const searchBtn = document.getElementById('search-btn');
 
 const myChart = document.getElementById('myChart').getContext('2d');
 const languageChart = document.getElementById('languageChart').getContext('2d');
+const barContainer = document.getElementById('bar-container');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
+const languagesMessage = document.getElementById('languages-message');
 
 const errorOutput = document.getElementById('error-output');
 
@@ -48,6 +50,7 @@ async function searchUser(username) {
     errorOutput.innerHTML = "";
     try {
         const usernameData = await callGithubAPI(`/users/${username}`)
+        //create an h2 'user information'
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
         userPhoto.src = usernameData.avatar_url;
@@ -100,14 +103,20 @@ async function reposPerLanguage(username) {
             counts[x] = (counts[x] || 0) + 1
         });
     barChart(counts);
+
+    languagesMessage.innerHTML = "";
+    if (reposData === undefined || reposData.length === 0) {
+        return recentActivitiyMessage.innerText = "No information found :("
+    }
+    let lastElem = reposData.slice(-1)
+    let lastElemDate = new Date(reposData[0].created_at);
+    languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
 }
 
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     searchUser(formInput.value)
 })
-
-// recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
 // **********
 // * Charts *
@@ -116,13 +125,12 @@ searchBtn.addEventListener('click', (e) => {
 function createPieChart(eventList) {
     recentActivitiyMessage.innerHTML = "";
     if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
-        // recentActivityDate.innerText = "";
         return recentActivitiyMessage.innerText = "No recent activity found :("
     }
 
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
-    recentActivityDate.innerText = `This is the recent activity, starting from ${lastElemDate.toLocaleDateString()}.`
+    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}.`
 
     let counter = 0;
     eventList.forEach(event => {
