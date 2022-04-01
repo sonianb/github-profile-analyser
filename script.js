@@ -22,6 +22,7 @@ const barContainer = document.getElementById('bar-container');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
 const languagesMessage = document.getElementById('languages-message');
+const listOfRepos = document.getElementById('list-of-repos')
 
 const errorOutput = document.getElementById('error-output');
 
@@ -67,6 +68,7 @@ async function searchUser(username) {
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
+        commitsPerRepo(username);
     } catch (error) {
         userInformation.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
@@ -99,7 +101,7 @@ async function recentActivity(username) {
 }
 
 async function reposPerLanguage(username) {
-    const reposData = await callGithubAPI(`/users/${username}/repos`)
+    const reposData = await callGithubAPI(`/users/${username}/repos?per_page=20`)
     const counts = {};
     reposData.map(repo => repo.language)
         .filter(language => language)
@@ -116,6 +118,18 @@ async function reposPerLanguage(username) {
     let lastElemDate = new Date(reposData[0].created_at);
     languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
 }
+
+async function commitsPerRepo(username) {
+    const sortedRepos = await callGithubAPI(`/users/${username}/repos?sort=pushed`);
+    sortedRepos.forEach(sortedRepo => {
+        const pElems = document.createElement('p');
+        pElems.innerText = sortedRepo.name;
+        listOfRepos.appendChild(pElems);
+    })
+
+}
+
+// commitsPerRepo('sonianb').then(() => console.log);
 
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
