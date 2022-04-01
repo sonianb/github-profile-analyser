@@ -9,7 +9,8 @@ const userFollowers = document.getElementById('user-followers');
 const userFollowing = document.getElementById('user-following');
 const userLocation = document.getElementById('user-location');
 const userPublicRepos = document.getElementById('public-repos');
-const userProfileUrl = document.getElementById('profile-url')
+const userProfileUrl = document.getElementById('profile-url');
+const userTitle = document.getElementById('user-title')
 
 const starredReposEl = document.getElementById('starred-repos');
 const formInput = document.getElementById('profile-search');
@@ -17,10 +18,14 @@ const searchBtn = document.getElementById('search-btn');
 
 const myChart = document.getElementById('myChart').getContext('2d');
 const languageChart = document.getElementById('languageChart').getContext('2d');
+const barContainer = document.getElementById('bar-container');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
+const languagesMessage = document.getElementById('languages-message');
 
 const errorOutput = document.getElementById('error-output');
+
+
 
 let activityPieChart;
 let languageBarChart;
@@ -32,7 +37,7 @@ let languageBarChart;
 async function callGithubAPI(apiUrl) {
     const response = await fetch('https://api.github.com' + apiUrl, {
         headers: {
-            authorization: "token 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"
+            authorization: token
         }
     });
     if (!response.ok) {
@@ -45,16 +50,20 @@ async function searchUser(username) {
     userInformation.classList.remove('hide')
     errorOutput.innerHTML = "";
     try {
-        const usernameData = await callGithubAPI(`/users/${username}`)
+        const usernameData = await callGithubAPI(`/users/${username}`);
+        userTitle.innerText = `User Information`
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
         userPhoto.src = usernameData.avatar_url;
         userFollowers.innerText = `Followers: ${usernameData.followers}`
         userFollowing.innerText = `Following: ${usernameData.following}`
-        userLocation.innerText = `Location: ${usernameData.location}`
         userPublicRepos.innerText = `Public repos: ${usernameData.public_repos}`
         userProfileUrl.setAttribute('href', usernameData.html_url);
-
+        if (usernameData.location) {
+            userLocation.innerText = `Location: ${usernameData.location}`
+        } else {
+            userLocation.innerText = "";
+        }
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
@@ -98,14 +107,20 @@ async function reposPerLanguage(username) {
             counts[x] = (counts[x] || 0) + 1
         });
     barChart(counts);
+
+    languagesMessage.innerHTML = "";
+    if (reposData === undefined || reposData.length === 0) {
+        return recentActivitiyMessage.innerText = "No information found :("
+    }
+    let lastElem = reposData.slice(-1)
+    let lastElemDate = new Date(reposData[0].created_at);
+    languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
 }
 
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     searchUser(formInput.value)
 })
-
-// recentActivity('sonianb').then((eventsData) => createPieChart(eventsData));
 
 // **********
 // * Charts *
@@ -114,13 +129,12 @@ searchBtn.addEventListener('click', (e) => {
 function createPieChart(eventList) {
     recentActivitiyMessage.innerHTML = "";
     if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
-        // recentActivityDate.innerText = "";
         return recentActivitiyMessage.innerText = "No recent activity found :("
     }
 
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
-    recentActivityDate.innerText = `This is the recent activity, starting from ${lastElemDate.toLocaleDateString()}.`
+    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}.`
 
     let counter = 0;
     eventList.forEach(event => {
@@ -149,18 +163,18 @@ function createPieChart(eventList) {
                 'Issues Opened',
                 'Commits'],
             datasets: [{
-                label: 'Population',
+                label: 'Recent Activity',
                 data: [
                     nbPullRequests,
                     nbIssuesOpened,
                     commitsTotal
                 ],
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
+                    '#71AB64',
+                    '#6663AB',
+                    '#ABA8F7'
                 ],
-                hoverOffset: 20
+                hoverOffset: 2
             }]
         }
     }
@@ -179,15 +193,16 @@ function barChart(counts) {
                 label: 'Repos per Language',
                 data: Object.values(counts),
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
+                    '#71AB64',
+                    '#ABA8F7',
+                    '#6663AB',
+                    '#A3F78F'
                 ],
                 borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
+                    '#71AB64',
+                    '#ABA8F7',
+                    '#6663AB',
+                    '#A3F78F'
                 ],
                 borderWidth: 1
             }]

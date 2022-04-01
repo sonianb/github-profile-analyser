@@ -9,6 +9,9 @@
         integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind&display=swap" rel="stylesheet">
     <title>GitHub Profile Analyser</title>
 </head>
 
@@ -16,42 +19,54 @@
     <main>
         <h1>GitHub Profile Analyser</h1>
         <form>
-            <label for="profile-search">Search for a profile:</label>
-            <input type="search" id="profile-search" name="q">
+            <label for="profile-search"></label>
+            <input type="search" id="profile-search" name="q" placeholder="Enter GitHub username...">
 
             <button id="search-btn">Search</button>
         </form>
         <p id="error-output"></p>
+
         <section class="hide" id="user-information">
-            <section>
-                <img id="user-photo" alt="">
-                <div id="usersname"></div>
-                <div id="date-joined"></div>
-                <div id="user-followers"></div>
-                <div id="user-following"></div>
-                <div id="user-location"></div>
-                <div id="public-repos"></div>
-                <a id="profile-url" target="_blank">View profile</a>
-            </section>
-
-            <section id="recent-activity">
-                <div id="activity-message"></div>
-                <div class="pie-container">
-                    <h2 id="recent-activity-date"></h2>
-                    <canvas class="pie-chart" id="myChart"></canvas>
+            <div id="display-user">
+                <div id="user-photo-and-info">
+                    <img id="user-photo" alt="">
+                    <section id="user-grid-area">
+                        <h2 id="user-title"></h2>
+                        <div id="usersname"></div>
+                        <div id="date-joined"></div>
+                        <div id="user-followers"></div>
+                        <div id="user-following"></div>
+                        <div id="user-location"></div>
+                        <div id="public-repos"></div>
+                        <a id="profile-url" target="_blank">View profile on GitHub</a>
+                    </section>
                 </div>
-            </section>
+            </div>
 
-            <section id="popular-languages">
-                <canvas class="bar-chart" id="languageChart"></canvas>
-            </section>
+            <div class="activity-grid">
+                <section id="recent-activity">
+                    <div id="activity-message"></div>
+                    <h2 id="recent-activity-date"></h2>
+                    <div class="pie-container chart-container">
+                        <canvas class="pie-chart" id="myChart"></canvas>
+                    </div>
+                </section>
 
-            <section>
+                <section id="popular-languages">
+                    <h2 id="languages-message"></h2>
+                    <div class="chart-container" id="bar-container">
+                        <canvas class="bar-chart" id="languageChart"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <section id="starred-repos-container">
                 <div id="starred-repos"></div>
             </section>
         </section>
     </main>
 
+    <script src="secret.js"></script>
     <script src="script.js"></script>
 
 </body>

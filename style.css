@@ -1,15 +1,123 @@
+:root {
+    box-sizing: border-box;
+    font-family: 'Hind', sans-serif;
+    --primary-color: #F7D5C1;
+    --secondary-color: #ABA8F7;
+    --dark-purple: #6663AB;
+    --neon-green: #A3F78F;
+    --dark-green: #71AB64;
+}
+
+body {
+    background-color: var(--primary-color);
+    margin: 0;
+}
+
 h1 {
     text-align: center;
 }
 
-#display-starred-repos {
+form {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
 }
 
-.pie-container {
-    width: 25rem;
+input[type=search] {
+    border-radius: 4px;
+    padding: 10px;
+    width: 15rem;
+    border: 2px solid var(--secondary-color);
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=search]:focus {
+    background-color: #f3f3f3;
+    width: 20rem;
+}
+
+#user-title {
+    margin: 0;
+}
+
+#display-user {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        ". user-photo-and-info . ";
+}
+
+#user-photo-and-info {
+    grid-area: user-photo-and-info;
+    display: flex;
+    border: 10px solid var(--neon-green);
+}
+
+#user-grid-area {
+    grid-area: user-grid-area;
+    min-width: max-content;
+    max-width: 15rem;
+    font-size: 1.3rem;
+    padding: 1.4rem;
+}
+
+#user-photo {
+    grid-area: user-photo;
+    max-width: 14rem;
+    padding: 1.4rem;
+    border-radius: 50%;
+    height: fit-content;
+
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 2fr 0.5fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+        ". recent-activity popular-languages ."
+    ;
+}
+
+#recent-activity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    grid-area: recent-activity;
+    border: 10px solid var(--secondary-color);
+}
+
+#popular-languages {
+    grid-area: popular-languages;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 10px solid var(--secondary-color);
+}
+
+#starred-repos-container {
+    display: flex;
+    flex-flow: column;
+    padding: 16px;
+    font-size: 1.2rem;
+    border: 10px solid var(--secondary-color);
+    max-width: 40rem;
+    margin-top: 2rem;
+}
+
+#languages-message {
+    text-align: center;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .hide {
