@@ -119,17 +119,30 @@ async function reposPerLanguage(username) {
     languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
 }
 
-async function commitsPerRepo(username) {
+async function showRepos(username) {
     const sortedRepos = await callGithubAPI(`/users/${username}/repos?sort=pushed`);
+    listOfRepos.innerText = "";
     sortedRepos.forEach(sortedRepo => {
-        const pElems = document.createElement('p');
-        pElems.innerText = sortedRepo.name;
-        listOfRepos.appendChild(pElems);
+        const pElem = document.createElement('p');
+        pElem.innerText = sortedRepo.name;
+        listOfRepos.appendChild(pElem);
     })
-
+    // listOfRepos.addEventListener('click', () => numberOfContributions(username, repo)); 
 }
 
-// commitsPerRepo('sonianb').then(() => console.log);
+async function numberOfContributions(username, repo) {
+    const contributorsData = await callGithubAPI(`/repos/${username}/${repo}/contributors`);
+    console.log(contributorsData);
+    let counter = 0;
+    contributorsData.forEach(repo => {
+        counter = repo.contributions + counter;
+    })
+    console.log(counter);
+    return counter;
+}
+
+numberOfContributions('sonianb', 'five-stars')
+showRepos('sonianb').then(() => console.log);
 
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
