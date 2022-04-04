@@ -22,7 +22,10 @@ const barContainer = document.getElementById('bar-container');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
 const languagesMessage = document.getElementById('languages-message');
-const listOfRepos = document.getElementById('list-of-repos')
+
+const doughnutChartCanvas = document.getElementById('doughnutChart').getContext('2d');
+
+const listOfRepos = document.getElementById('list-of-repos');
 
 const errorOutput = document.getElementById('error-output');
 
@@ -30,6 +33,7 @@ const errorOutput = document.getElementById('error-output');
 
 let activityPieChart;
 let languageBarChart;
+let doughnutChart;
 
 // *****************
 // * Functionality *
@@ -68,7 +72,7 @@ async function searchUser(username) {
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
-        commitsPerRepo(username);
+        // commitsPerRepo(username);
     } catch (error) {
         userInformation.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
@@ -126,22 +130,19 @@ async function showRepos(username) {
         const pElem = document.createElement('p');
         pElem.innerText = sortedRepo.name;
         listOfRepos.appendChild(pElem);
+        pElem.addEventListener('click', () => contributorsPerRepo(username, sortedRepo.name));
     })
-    // listOfRepos.addEventListener('click', () => numberOfContributions(username, repo)); 
 }
 
-async function numberOfContributions(username, repo) {
+async function contributorsPerRepo(username, repo) {
     const contributorsData = await callGithubAPI(`/repos/${username}/${repo}/contributors`);
-    console.log(contributorsData);
-    let counter = 0;
-    contributorsData.forEach(repo => {
-        counter = repo.contributions + counter;
-    })
-    console.log(counter);
-    return counter;
+    const names = contributorsData.map(contributor => contributor.login);
+    const contributions = contributorsData.map(num => num.contributions);
+    createDoughnutChart(names, contributions);
+    // console.log(contributorsData.map(contributor => ({name: contributor.login, amount: contributor.contributions})));
 }
 
-numberOfContributions('sonianb', 'five-stars')
+contributorsPerRepo('sonianb', 'five-stars')
 showRepos('sonianb').then(() => console.log);
 
 searchBtn.addEventListener('click', (e) => {
@@ -248,3 +249,28 @@ function barChart(counts) {
     }
     languageBarChart = new Chart(languageChart, config)
 }
+
+//generate a new chart every time the user clicks on a repo
+function createDoughnutChart(names, contributions) {
+    const config = {
+        type: 'doughnut',
+        data: {
+            labels: names,
+            datasets: [{
+                label: 'My First Dataset',
+                data: contributions, //num of contributions
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    };
+
+    if (doughnutChart) {
+        doughnutChart.destroy()
+    }
+    doughnutChart = new Chart(doughnutChartCanvas, config)
+};
