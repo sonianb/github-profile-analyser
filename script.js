@@ -1,6 +1,7 @@
 // *************
 // * Selectors *
 // *************
+const loader = document.getElementById('loader-container');
 const userInformation = document.getElementById('user-information')
 const userPhoto = document.getElementById('user-photo');
 const dateJoined = document.getElementById('date-joined');
@@ -29,8 +30,6 @@ const listOfRepos = document.getElementById('list-of-repos');
 
 const errorOutput = document.getElementById('error-output');
 
-
-
 let activityPieChart;
 let languageBarChart;
 let doughnutChart;
@@ -52,11 +51,16 @@ async function callGithubAPI(apiUrl) {
 }
 
 async function searchUser(username) {
-    userInformation.classList.remove('hide')
+    loader.classList.remove('hide');
+    userInformation.classList.add('hide')
     errorOutput.innerHTML = "";
     try {
-        const usernameData = await callGithubAPI(`/users/${username}`);
-        console.log(usernameData)
+        const timer = new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+        });
+        const [usernameData] = await Promise.all([callGithubAPI(`/users/${username}`), timer]);
+        loader.classList.add('hide');
+        userInformation.classList.remove('hide');
         userTitle.innerText = `User Information`
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
@@ -143,17 +147,15 @@ async function contributorsPerRepo(username, repo) {
     // console.log(contributorsData.map(contributor => ({name: contributor.login, amount: contributor.contributions})));
 }
 
-
 formInput.addEventListener('keyup', (event) => {
     if (event.key === 13) {
-        event.preventDefault();
         searchBtn.click();
     }
 })
 
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    searchUser(formInput.value)
+    searchUser(formInput.value);
 })
 
 searchBtn.classList.add('hide');

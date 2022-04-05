@@ -18,15 +18,15 @@
 <body>
     <main>
         <h1>GitHub Profile Analyser</h1>
-        <div class="loader-container">
-            <div id="loader"></div>
-        </div>
         <form>
             <label for="profile-search"></label>
             <input type="search" id="profile-search" name="q" placeholder="Enter GitHub username...">
 
             <button id="search-btn">Search</button>
         </form>
+        <div class="loader-container hide" id="loader-container">
+            <div id="loader"></div>
+        </div>
         <p id="error-output"></p>
 
         <section class="hide" id="user-information">
