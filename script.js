@@ -1,6 +1,7 @@
 // *************
 // * Selectors *
 // *************
+const loader = document.getElementById('loader-container');
 const userInformation = document.getElementById('user-information')
 const userPhoto = document.getElementById('user-photo');
 const dateJoined = document.getElementById('date-joined');
@@ -23,12 +24,15 @@ const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
 const languagesMessage = document.getElementById('languages-message');
 
+const doughnutChartCanvas = document.getElementById('doughnutChart').getContext('2d');
+
+const listOfRepos = document.getElementById('list-of-repos');
+
 const errorOutput = document.getElementById('error-output');
-
-
 
 let activityPieChart;
 let languageBarChart;
+let doughnutChart;
 
 // *****************
 // * Functionality *
@@ -47,10 +51,16 @@ async function callGithubAPI(apiUrl) {
 }
 
 async function searchUser(username) {
-    userInformation.classList.remove('hide')
+    loader.classList.remove('hide');
+    userInformation.classList.add('hide')
     errorOutput.innerHTML = "";
     try {
-        const usernameData = await callGithubAPI(`/users/${username}`);
+        const timer = new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+        });
+        const [usernameData] = await Promise.all([callGithubAPI(`/users/${username}`), timer]);
+        loader.classList.add('hide');
+        userInformation.classList.remove('hide');
         userTitle.innerText = `User Information`
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
@@ -67,6 +77,7 @@ async function searchUser(username) {
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
+        showRepos(username);
     } catch (error) {
         userInformation.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
@@ -99,7 +110,7 @@ async function recentActivity(username) {
 }
 
 async function reposPerLanguage(username) {
-    const reposData = await callGithubAPI(`/users/${username}/repos`)
+    const reposData = await callGithubAPI(`/users/${username}/repos?per_page=20`)
     const counts = {};
     reposData.map(repo => repo.language)
         .filter(language => language)
@@ -117,10 +128,37 @@ async function reposPerLanguage(username) {
     languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
 }
 
+async function showRepos(username) {
+    const sortedRepos = await callGithubAPI(`/users/${username}/repos?sort=pushed`);
+    listOfRepos.innerText = "";
+    sortedRepos.forEach(sortedRepo => {
+        const pElem = document.createElement('p');
+        pElem.innerText = sortedRepo.name;
+        listOfRepos.appendChild(pElem);
+        pElem.addEventListener('click', () => contributorsPerRepo(username, sortedRepo.name));
+    })
+}
+
+async function contributorsPerRepo(username, repo) {
+    const contributorsData = await callGithubAPI(`/repos/${username}/${repo}/contributors`);
+    const names = contributorsData.map(contributor => contributor.login);
+    const contributions = contributorsData.map(num => num.contributions);
+    createDoughnutChart(names, contributions);
+    // console.log(contributorsData.map(contributor => ({name: contributor.login, amount: contributor.contributions})));
+}
+
+formInput.addEventListener('keyup', (event) => {
+    if (event.key === 13) {
+        searchBtn.click();
+    }
+})
+
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    searchUser(formInput.value)
+    searchUser(formInput.value);
 })
+
+searchBtn.classList.add('hide');
 
 // **********
 // * Charts *
@@ -221,3 +259,28 @@ function barChart(counts) {
     }
     languageBarChart = new Chart(languageChart, config)
 }
+
+//generate a new chart every time the user clicks on a repo
+function createDoughnutChart(names, contributions) {
+    const config = {
+        type: 'doughnut',
+        data: {
+            labels: names,
+            datasets: [{
+                label: 'My First Dataset',
+                data: contributions, //num of contributions
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    };
+
+    if (doughnutChart) {
+        doughnutChart.destroy()
+    }
+    doughnutChart = new Chart(doughnutChartCanvas, config)
+};
