@@ -145,10 +145,20 @@ async function contributorsPerRepo(username, repo) {
 contributorsPerRepo('sonianb', 'five-stars')
 showRepos('sonianb').then(() => console.log);
 
+//run search with 'enter'
+formInput.addEventListener('keyup', (event) => {
+    if (event.key === 13) {
+        event.preventDefault();
+        searchBtn.click();
+    }
+})
+
 searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     searchUser(formInput.value)
 })
+
+searchBtn.classList.add('hide');
 
 // **********
 // * Charts *
