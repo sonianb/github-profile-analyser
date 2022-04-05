@@ -56,6 +56,7 @@ async function searchUser(username) {
     errorOutput.innerHTML = "";
     try {
         const usernameData = await callGithubAPI(`/users/${username}`);
+        console.log(usernameData)
         userTitle.innerText = `User Information`
         nameUser.innerText = `Name: ${usernameData.name}`
         dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
@@ -72,7 +73,7 @@ async function searchUser(username) {
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
-        // commitsPerRepo(username);
+        showRepos(username);
     } catch (error) {
         userInformation.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
@@ -142,10 +143,7 @@ async function contributorsPerRepo(username, repo) {
     // console.log(contributorsData.map(contributor => ({name: contributor.login, amount: contributor.contributions})));
 }
 
-contributorsPerRepo('sonianb', 'five-stars')
-showRepos('sonianb').then(() => console.log);
 
-//run search with 'enter'
 formInput.addEventListener('keyup', (event) => {
     if (event.key === 13) {
         event.preventDefault();
