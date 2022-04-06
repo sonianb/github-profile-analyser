@@ -29,6 +29,7 @@ const doughnutChartCanvas = document.getElementById('doughnutChart').getContext(
 const listOfRepos = document.getElementById('list-of-repos');
 
 const errorOutput = document.getElementById('error-output');
+const collapseBtn = document.getElementsByClassName('collapse');
 
 let activityPieChart;
 let languageBarChart;
@@ -159,6 +160,17 @@ searchBtn.addEventListener('click', (e) => {
 })
 
 searchBtn.classList.add('hide');
+
+collapseBtn[0].addEventListener("click", function () {
+    this.classList.toggle("active");
+    let content = this.nextElementSibling;
+    if (content.style.display === "block") {
+        content.style.display = "none";
+    } else {
+        content.style.display = "block";
+    }
+});
+
 
 // **********
 // * Charts *
