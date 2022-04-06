@@ -161,7 +161,7 @@ input[type=search]:focus {
     height: 100%;
 }
 
-.collapse {
+.collapse-repos, .collapse-starred {
     background-color: var(--primary-color);
     color: #444;
     cursor: pointer;
@@ -173,7 +173,7 @@ input[type=search]:focus {
     font-size: 15px;
 }
 
-.active, .collapse:hover {
+.active, .collapse-repos:hover {
     background-color: #ccc;
 }
 
