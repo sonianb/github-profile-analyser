@@ -70,13 +70,12 @@ input[type=search] {
     padding: 10px;
     width: 15rem;
     border: 2px solid var(--secondary-color);
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-family: inherit;
     transition: width 0.4s ease-in-out;
 }
 
 input[type=search]:focus {
-    background-color: #f3f3f3;
     width: 20rem;
 }
 
@@ -117,11 +116,12 @@ input[type=search]:focus {
 
 .activity-grid {
     display: grid;
-    grid-template-columns: 0.5fr 2fr 2fr 0.5fr;
+    grid-template-columns: 0.5fr 2fr 0.2fr 2fr 0.5fr;
     grid-template-rows: 1fr;
     grid-template-areas:
-        ". recent-activity popular-languages ."
+        ". recent-activity . popular-languages ."
     ;
+    margin-top: 1rem;
 }
 
 #recent-activity {
@@ -142,13 +142,7 @@ input[type=search]:focus {
 }
 
 #starred-repos-container {
-    display: flex;
-    flex-flow: column;
-    padding: 16px;
     font-size: 1.2rem;
-    border: 10px solid var(--secondary-color);
-    max-width: 40rem;
-    margin-top: 2rem;
 }
 
 #languages-message {
