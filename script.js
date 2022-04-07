@@ -127,7 +127,7 @@ async function reposPerLanguage(username) {
     }
     let lastElem = reposData.slice(-1)
     let lastElemDate = new Date(reposData[0].created_at);
-    languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
+    languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}`
 }
 
 async function showRepos(username) {
@@ -164,12 +164,7 @@ searchBtn.classList.add('hide');
 
 collapseRepos[0].addEventListener("click", function () {
     this.classList.toggle("active");
-    let content = this.nextElementSibling;
-    if (content.style.display === "block") {
-        content.style.display = "none";
-    } else {
-        content.style.display = "block";
-    }
+    this.nextElementSibling.classList.toggle('hide');
 });
 
 collapseStarred[0].addEventListener("click", () => {
@@ -194,7 +189,7 @@ function createPieChart(eventList) {
 
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
-    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}.`
+    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}`
 
     let counter = 0;
     eventList.forEach(event => {
@@ -292,9 +287,11 @@ function createDoughnutChart(names, contributions) {
                 label: 'My First Dataset',
                 data: contributions, //num of contributions
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
+                    '#71AB64',
+                    '#6663AB',
+                    '#A3F78F',
+                    '#ABA8F7',
+                    '#F7D5C1'
                 ],
                 hoverOffset: 4
             }]
