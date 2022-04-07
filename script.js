@@ -82,6 +82,7 @@ async function searchUser(username) {
         showRepos(username);
     } catch (error) {
         userInformation.classList.add('hide');
+        loader.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
     }
 }
