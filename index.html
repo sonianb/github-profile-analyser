@@ -61,19 +61,23 @@
                         <canvas class="bar-chart" id="languageChart"></canvas>
                     </div>
                 </section>
-            </div>
 
-            <button type="button" class="collapse-repos" id="collapsible-btn">See Latest Repos</button>
-            <section class="content" id="list-of-repos">
-            </section>
+                <div class="latest-repos-grid">
+                    <button type="button" class="collapse-repos" id="collapsible-btn">See Latest Repos</button>
+                    <section class="content" id="list-of-repos">
+                    </section>
+                </div>
+                <div class="starred-repos-grid">
+                    <button type="button" class="collapse-starred">See Starred Repos ⭐</button>
+                    <section class="content" id="starred-repos-container">
+                        <div id="starred-repos"></div>
+                    </section>
+                </div>
+            </div>
             <div class="chart-container" id="doughnut-container">
                 <canvas class="doughnut-chart" id="doughnutChart"></canvas>
             </div>
 
-            <button type="button" class="collapse-starred">See Starred Repos ⭐</button>
-            <section class="content" id="starred-repos-container">
-                <div id="starred-repos"></div>
-            </section>
 
         </section>
     </main>

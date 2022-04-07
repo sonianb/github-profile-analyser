@@ -116,12 +116,15 @@ input[type=search]:focus {
 
 .activity-grid {
     display: grid;
-    grid-template-columns: 0.5fr 2fr 0.2fr 2fr 0.5fr;
-    grid-template-rows: 1fr;
+    grid-template-columns: 0.5fr 2fr 2fr 0.5fr;
+    grid-template-rows: 2fr;
     grid-template-areas:
-        ". recent-activity . popular-languages ."
+        ". recent-activity popular-languages ."
+        ". latest-repos starred-repos ."
     ;
     margin-top: 1rem;
+    column-gap: 1rem;
+    row-gap: 1rem;
 }
 
 #recent-activity {
@@ -141,8 +144,12 @@ input[type=search]:focus {
     border: 10px solid var(--primary-color);
 }
 
-#starred-repos-container {
-    font-size: 1.2rem;
+.latest-repos-grid {
+    grid-area: latest-repos;
+}
+
+.starred-repos-grid {
+    grid-area: starred-repos;
 }
 
 #languages-message {
