@@ -162,7 +162,8 @@ input[type=search]:focus {
     height: 100%;
 }
 
-.collapse-repos, .collapse-starred {
+.collapse-repos,
+.collapse-starred {
     background-color: var(--primary-color);
     color: #444;
     cursor: pointer;
@@ -174,8 +175,11 @@ input[type=search]:focus {
     font-size: 15px;
 }
 
-.active, .collapse-repos:hover {
-    background-color: #ccc;
+.active,
+.collapse-repos:hover,
+.collapse-starred:hover {
+    background-color: var(--secondary-color);
+    font-style: italic;
 }
 
 .content {
@@ -183,6 +187,9 @@ input[type=search]:focus {
     display: none;
     overflow: hidden;
     background-color: #f1f1f1;
+    border: 2px solid var(--secondary-color);
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .hide {
