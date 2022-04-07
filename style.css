@@ -180,7 +180,6 @@ input[type=search]:focus {
     width: 100%;
     border: none;
     text-align: left;
-    outline: none;
     font-size: 1.1rem;
     color: #444;
 }
@@ -210,4 +209,24 @@ input[type=search]:focus {
 
 .hide {
     display: none;
+}
+
+@media (max-width: 880px) {
+    #user-photo-and-info {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .activity-grid {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .latest-repos-grid,
+    .starred-repos-grid {
+        width: 23rem;
+    }
+
 }
