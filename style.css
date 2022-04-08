@@ -8,6 +8,11 @@
     --dark-green: #71AB64;
 }
 
+main {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
 body {
     background-color: #f3f3f3;
     margin: 0;
@@ -135,6 +140,7 @@ input[type=search]:focus {
     flex-direction: column;
     grid-area: recent-activity;
     border: 10px solid var(--primary-color);
+    width: 100%;
 }
 
 #popular-languages {
@@ -179,9 +185,9 @@ input[type=search]:focus {
     padding: 18px;
     width: 100%;
     border: none;
-    text-align: left;
     font-size: 1.1rem;
     color: #444;
+    margin-top: 0.7rem;
 }
 
 .active,
@@ -211,14 +217,23 @@ input[type=search]:focus {
     font-size: 1.2rem;
 }
 
+.collapse-container {
+    flex-direction: column;
+}
+
 .hide {
     display: none;
 }
 
 @media (max-width: 880px) {
+    #display-user {
+        display: block;
+    }
+
     #user-photo-and-info {
         display: flex;
         flex-flow: row wrap;
+        justify-content: center;
     }
 
     .activity-grid {
@@ -228,9 +243,11 @@ input[type=search]:focus {
         align-items: center;
     }
 
-    .latest-repos-grid,
-    .starred-repos-grid {
-        width: 23rem;
+    #doughnut-container {
+        padding: 2rem;
     }
 
+    .content {
+        font-size: inherit;
+    }
 }

@@ -62,24 +62,27 @@
                     </div>
                 </section>
 
-                <div class="latest-repos-grid">
-                    <button type="button" class="collapse-repos" id="collapsible-btn">See Latest Repos (and click on a
-                        repo
-                        to see the contributors)</button>
-                    <section class="content latest-repos-content hide">
-                        <div id="list-of-repos">
-                        </div>
-                        <div id="doughnut-container">
-                            <canvas class="doughnut-chart" id="doughnutChart"></canvas>
-                        </div>
-                    </section>
+                <div class="collapse-container">
+                    <div class="latest-repos-grid">
+                        <button type="button" class="collapse-repos" id="collapsible-btn">See Latest Repos (and click on
+                            a
+                            repo
+                            to see the contributors)</button>
+                        <section class="content hide latest-repos-content">
+                            <div id="list-of-repos">
+                            </div>
+                            <div id="doughnut-container">
+                                <canvas class="doughnut-chart" id="doughnutChart"></canvas>
+                            </div>
+                        </section>
 
-                </div>
-                <div class="starred-repos-grid">
-                    <button type="button" class="collapse-starred">See Starred Repos</button>
-                    <section class="content" id="starred-repos-container">
-                        <div id="starred-repos"></div>
-                    </section>
+                    </div>
+                    <div class="starred-repos-grid">
+                        <button type="button" class="collapse-starred">See Starred Repos</button>
+                        <section class="content" id="starred-repos-container">
+                            <div id="starred-repos"></div>
+                        </section>
+                    </div>
                 </div>
             </div>
 
