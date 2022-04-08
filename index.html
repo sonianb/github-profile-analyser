@@ -61,24 +61,35 @@
                         <canvas class="bar-chart" id="languageChart"></canvas>
                     </div>
                 </section>
+
+                <div class="latest-repos-grid">
+                    <button type="button" class="collapse-repos" id="collapsible-btn">See Latest Repos (click on
+                        a
+                        repo
+                        to see its contributors)</button>
+                    <section class="content hide latest-repos-content">
+                        <div id="list-of-repos">
+                        </div>
+                        <div id="doughnut-container">
+                            <canvas class="doughnut-chart" id="doughnutChart"></canvas>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="starred-repos-grid">
+                    <button type="button" class="collapse-starred">See Starred Repos</button>
+                    <section class="content" id="starred-repos-container">
+                        <div id="starred-repos"></div>
+                    </section>
+                </div>
             </div>
 
-            <section id="popular-repos">
-                <h2 id="repos-message"></h2>
-                <div class="chart-container" id="doughnut-container">
-                    <canvas class="doughnut-chart" id="doughnutChart"></canvas>
-                </div>
-            </section>
-
-            <section id="starred-repos-container">
-                <div id="starred-repos"></div>
-            </section>
-
-            <section id="list-of-repos">
-
-            </section>
         </section>
     </main>
+
+    <footer>
+        Developed by <a class="github-link" href="https://github.com/sonianb">Sonia</a> 🛠️
+    </footer>
 
     <script src="secret.js"></script>
     <script src="script.js"></script>

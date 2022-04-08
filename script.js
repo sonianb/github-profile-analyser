@@ -29,6 +29,8 @@ const doughnutChartCanvas = document.getElementById('doughnutChart').getContext(
 const listOfRepos = document.getElementById('list-of-repos');
 
 const errorOutput = document.getElementById('error-output');
+const collapseRepos = document.getElementsByClassName('collapse-repos');
+const collapseStarred = document.getElementsByClassName('collapse-starred')
 
 let activityPieChart;
 let languageBarChart;
@@ -80,6 +82,7 @@ async function searchUser(username) {
         showRepos(username);
     } catch (error) {
         userInformation.classList.add('hide');
+        loader.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
     }
 }
@@ -125,10 +128,13 @@ async function reposPerLanguage(username) {
     }
     let lastElem = reposData.slice(-1)
     let lastElemDate = new Date(reposData[0].created_at);
-    languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}.`
+    languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}`
 }
 
 async function showRepos(username) {
+    if (doughnutChart) {
+        doughnutChart.destroy()
+    }
     const sortedRepos = await callGithubAPI(`/users/${username}/repos?sort=pushed`);
     listOfRepos.innerText = "";
     sortedRepos.forEach(sortedRepo => {
@@ -144,7 +150,6 @@ async function contributorsPerRepo(username, repo) {
     const names = contributorsData.map(contributor => contributor.login);
     const contributions = contributorsData.map(num => num.contributions);
     createDoughnutChart(names, contributions);
-    // console.log(contributorsData.map(contributor => ({name: contributor.login, amount: contributor.contributions})));
 }
 
 formInput.addEventListener('keyup', (event) => {
@@ -160,6 +165,21 @@ searchBtn.addEventListener('click', (e) => {
 
 searchBtn.classList.add('hide');
 
+collapseRepos[0].addEventListener("click", function () {
+    this.classList.toggle("active");
+    this.nextElementSibling.classList.toggle('hide');
+});
+
+collapseStarred[0].addEventListener("click", () => {
+    collapseStarred[0].classList.toggle("active");
+    let content = collapseStarred[0].nextElementSibling;
+    if (content.style.display === "block") {
+        content.style.display = "none";
+    } else {
+        content.style.display = "block";
+    }
+});
+
 // **********
 // * Charts *
 // **********
@@ -172,7 +192,7 @@ function createPieChart(eventList) {
 
     let lastElem = eventList.slice(-1)
     let lastElemDate = new Date(lastElem[0].created_at);
-    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}.`
+    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}`
 
     let counter = 0;
     eventList.forEach(event => {
@@ -270,9 +290,11 @@ function createDoughnutChart(names, contributions) {
                 label: 'My First Dataset',
                 data: contributions, //num of contributions
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
+                    '#71AB64',
+                    '#6663AB',
+                    '#A3F78F',
+                    '#ABA8F7',
+                    '#F7D5C1'
                 ],
                 hoverOffset: 4
             }]
