@@ -11,6 +11,8 @@
 main {
     margin-left: 12px;
     margin-right: 12px;
+    min-height: 100vh;
+    margin-bottom: 2rem;
 }
 
 body {
@@ -168,6 +170,11 @@ input[type=search]:focus {
 
 .starred-repos-grid {
     grid-area: starred-repos;
+    width: 100%;
+}
+
+#starred-repos {
+    padding: 1rem;
 }
 
 #languages-message {
@@ -227,10 +234,8 @@ input[type=search]:focus {
 }
 
 footer {
-    position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%;
     background-color: #e8e8e8;
     color: inherit;
     padding: 0.7rem;
@@ -265,5 +270,9 @@ footer {
 
     .content {
         font-size: inherit;
+    }
+
+    footer {
+        font-size: 0.8rem;
     }
 }
