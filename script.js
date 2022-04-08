@@ -132,6 +132,9 @@ async function reposPerLanguage(username) {
 }
 
 async function showRepos(username) {
+    if (doughnutChart) {
+        doughnutChart.destroy()
+    }
     const sortedRepos = await callGithubAPI(`/users/${username}/repos?sort=pushed`);
     listOfRepos.innerText = "";
     sortedRepos.forEach(sortedRepo => {
@@ -147,7 +150,6 @@ async function contributorsPerRepo(username, repo) {
     const names = contributorsData.map(contributor => contributor.login);
     const contributions = contributorsData.map(num => num.contributions);
     createDoughnutChart(names, contributions);
-    // console.log(contributorsData.map(contributor => ({name: contributor.login, amount: contributor.contributions})));
 }
 
 formInput.addEventListener('keyup', (event) => {
