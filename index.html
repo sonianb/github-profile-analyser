@@ -17,22 +17,24 @@
 
 <body>
     <main>
-        <h1>GitHub Profile Analyser</h1>
+        <h1>GitHub Profile Analyser 🔎</h1>
         <form>
             <label for="profile-search"></label>
             <input type="search" id="profile-search" name="q" placeholder="Enter GitHub username...">
 
-            <button id="search-btn">Search</button>
+            <button class="hide" id="search-btn">Search</button>
         </form>
+
         <div class="loader-container hide" id="loader-container">
             <div id="loader"></div>
         </div>
+
         <p id="error-output"></p>
 
         <section class="hide" id="user-information">
             <div id="display-user">
                 <div id="user-photo-and-info">
-                    <img id="user-photo" alt="">
+                    <img id="user-photo" alt="a photo of the github user">
                     <section id="user-grid-area">
                         <h2 id="user-title"></h2>
                         <div id="usersname"></div>

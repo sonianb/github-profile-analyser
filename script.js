@@ -12,22 +12,19 @@ const userLocation = document.getElementById('user-location');
 const userPublicRepos = document.getElementById('public-repos');
 const userProfileUrl = document.getElementById('profile-url');
 const userTitle = document.getElementById('user-title')
-
 const starredReposEl = document.getElementById('starred-repos');
 const formInput = document.getElementById('profile-search');
 const searchBtn = document.getElementById('search-btn');
-
-const myChart = document.getElementById('myChart').getContext('2d');
-const languageChart = document.getElementById('languageChart').getContext('2d');
 const barContainer = document.getElementById('bar-container');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
 const languagesMessage = document.getElementById('languages-message');
 
+const myChart = document.getElementById('myChart').getContext('2d');
+const languageChart = document.getElementById('languageChart').getContext('2d');
 const doughnutChartCanvas = document.getElementById('doughnutChart').getContext('2d');
 
 const listOfRepos = document.getElementById('list-of-repos');
-
 const errorOutput = document.getElementById('error-output');
 const collapseRepos = document.getElementsByClassName('collapse-repos');
 const collapseStarred = document.getElementsByClassName('collapse-starred')
@@ -41,11 +38,13 @@ let doughnutChart;
 // *****************
 
 async function callGithubAPI(apiUrl) {
-    const response = await fetch('https://api.github.com' + apiUrl, {
+    const options = window.token ? {
         headers: {
             authorization: token
         }
-    });
+    } : {};
+
+    const response = await fetch('https://api.github.com' + apiUrl, options);
     if (!response.ok) {
         throw new Error('Something went wrong ' + response.status);
     }
@@ -126,8 +125,8 @@ async function reposPerLanguage(username) {
     if (reposData === undefined || reposData.length === 0) {
         return recentActivitiyMessage.innerText = "No information found :("
     }
-    let lastElem = reposData.slice(-1)
-    let lastElemDate = new Date(reposData[0].created_at);
+    let lastElem = reposData.slice(-1)[0]
+    let lastElemDate = new Date(lastElem.created_at);
     languagesMessage.innerText = `Repos per Language used since ${lastElemDate.toLocaleDateString()}`
 }
 
@@ -162,8 +161,6 @@ searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     searchUser(formInput.value);
 })
-
-searchBtn.classList.add('hide');
 
 collapseRepos[0].addEventListener("click", function () {
     this.classList.toggle("active");
