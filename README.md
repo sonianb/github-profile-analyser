@@ -1,14 +1,16 @@
 # GitHub Profile Analyser
 
-Brief: search for a GitHub username to see information about their profile. Figure out what interesting data you can pull out of a profile using the GitHub API docs.
+Search for a GitHub username and see information about their profile.
 
-## Recommended Features
+## Features
 
-- Show their starred projects.
-- Show their recent activity.
-- Figure out what their most popular repositories are.
+- A pie chart showing user's number of PRs, issues opened, and commits.  
+- A bar chart showing the number of repos per language.
+- A list of user's latest repos.
+- A doughnut chart showing the collaborators for each recent repo.
+- A list of user's starred repos.
 
-## Stretch goals
+## Made with
 
-- Who have they collaborated with the most?
-- Visualise the data with Chart.js
+- [GitHub REST API](https://docs.github.com/en/rest)
+- [Chart.js](https://www.chartjs.org/) 
