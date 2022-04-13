@@ -131,7 +131,7 @@ input[type=search]:focus {
         ". starred-repos starred-repos ."
     ;
     margin-top: 1rem;
-    column-gap: 1rem;
+    column-gap: 2rem;
     row-gap: 1rem;
 }
 

@@ -2,6 +2,10 @@
 // * Charts *
 // **********
 
+let activityPieChart;
+let languageBarChart;
+let doughnutChart;
+
 function createPieChart(eventList) {
     recentActivitiyMessage.innerHTML = "";
     if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
@@ -60,7 +64,7 @@ function createPieChart(eventList) {
     activityPieChart = new Chart(myChart, config)
 };
 
-function barChart(counts) {
+function createBarChart(counts) {
     const config = {
         type: 'bar',
         data: {
