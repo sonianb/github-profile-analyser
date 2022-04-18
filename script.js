@@ -13,8 +13,8 @@ const userPublicRepos = document.getElementById('public-repos');
 const userProfileUrl = document.getElementById('profile-url');
 const userTitle = document.getElementById('user-title')
 const starredReposEl = document.getElementById('starred-repos');
-const formInput = document.getElementById('profile-search');
-const searchBtn = document.getElementById('search-btn');
+const formEl = document.getElementById('profile-search');
+const formInputEl = document.getElementById('profile-search-input');
 const barContainer = document.getElementById('bar-container');
 const recentActivityDate = document.getElementById('recent-activity-date');
 const recentActivitiyMessage = document.getElementById('activity-message');
@@ -26,12 +26,8 @@ const doughnutChartCanvas = document.getElementById('doughnutChart').getContext(
 
 const listOfRepos = document.getElementById('list-of-repos');
 const errorOutput = document.getElementById('error-output');
-const collapseRepos = document.getElementsByClassName('collapse-repos');
-const collapseStarred = document.getElementsByClassName('collapse-starred')
+const collapseComponents = document.getElementsByClassName('collapse-component');
 
-let activityPieChart;
-let languageBarChart;
-let doughnutChart;
 
 // *****************
 // * Functionality *
@@ -59,22 +55,8 @@ async function searchUser(username) {
         const timer = new Promise((resolve) => {
             setTimeout(resolve, 1000);
         });
-        const [usernameData] = await Promise.all([callGithubAPI(`/users/${username}`), timer]);
-        loader.classList.add('hide');
-        userInformation.classList.remove('hide');
-        userTitle.innerText = `User Information`
-        nameUser.innerText = `Name: ${usernameData.name}`
-        dateJoined.innerText = `Joined: ${new Date(usernameData.created_at).toLocaleDateString()}`
-        userPhoto.src = usernameData.avatar_url;
-        userFollowers.innerText = `Followers: ${usernameData.followers}`
-        userFollowing.innerText = `Following: ${usernameData.following}`
-        userPublicRepos.innerText = `Public repos: ${usernameData.public_repos}`
-        userProfileUrl.setAttribute('href', usernameData.html_url);
-        if (usernameData.location) {
-            userLocation.innerText = `Location: ${usernameData.location}`
-        } else {
-            userLocation.innerText = "";
-        }
+        const [userData] = await Promise.all([callGithubAPI(`/users/${username}`), timer]);
+        showUserInformation(userData);
         getStarredRepos(username);
         reposPerLanguage(username);
         recentActivity(username);
@@ -83,6 +65,24 @@ async function searchUser(username) {
         userInformation.classList.add('hide');
         loader.classList.add('hide');
         errorOutput.innerText = `Can't find ${username}. Try again.`
+    }
+}
+
+function showUserInformation(userData) {
+    loader.classList.add('hide');
+    userInformation.classList.remove('hide');
+    userTitle.innerText = `User Information`
+    nameUser.innerText = `Name: ${userData.name}`
+    dateJoined.innerText = `Joined: ${new Date(userData.created_at).toLocaleDateString()}`
+    userPhoto.src = userData.avatar_url;
+    userFollowers.innerText = `Followers: ${userData.followers}`
+    userFollowing.innerText = `Following: ${userData.following}`
+    userPublicRepos.innerText = `Public repos: ${userData.public_repos}`
+    userProfileUrl.setAttribute('href', userData.html_url);
+    if (userData.location) {
+        userLocation.innerText = `Location: ${userData.location}`
+    } else {
+        userLocation.innerText = "";
     }
 }
 
@@ -119,7 +119,7 @@ async function reposPerLanguage(username) {
         .forEach(x => {
             counts[x] = (counts[x] || 0) + 1
         });
-    barChart(counts);
+    createBarChart(counts);
 
     languagesMessage.innerHTML = "";
     if (reposData === undefined || reposData.length === 0) {
@@ -151,155 +151,16 @@ async function contributorsPerRepo(username, repo) {
     createDoughnutChart(names, contributions);
 }
 
-formInput.addEventListener('keyup', (event) => {
-    if (event.key === 13) {
-        searchBtn.click();
-    }
+formEl.addEventListener('submit', (event) => {
+    event.preventDefault();
+    console.log(event);
+    searchUser(formInputEl.value);
+
 })
 
-searchBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    searchUser(formInput.value);
-})
-
-collapseRepos[0].addEventListener("click", function () {
-    this.classList.toggle("active");
-    this.nextElementSibling.classList.toggle('hide');
-});
-
-collapseStarred[0].addEventListener("click", () => {
-    collapseStarred[0].classList.toggle("active");
-    let content = collapseStarred[0].nextElementSibling;
-    if (content.style.display === "block") {
-        content.style.display = "none";
-    } else {
-        content.style.display = "block";
-    }
-});
-
-// **********
-// * Charts *
-// **********
-
-function createPieChart(eventList) {
-    recentActivitiyMessage.innerHTML = "";
-    if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
-        return recentActivitiyMessage.innerText = "No recent activity found :("
-    }
-
-    let lastElem = eventList.slice(-1)
-    let lastElemDate = new Date(lastElem[0].created_at);
-    recentActivityDate.innerText = `Recent activity since ${lastElemDate.toLocaleDateString()}`
-
-    let counter = 0;
-    eventList.forEach(event => {
-        if (event.type === "PullRequestEvent") {
-            counter++
-        }
+Array.from(collapseComponents).forEach(component => {
+    component.addEventListener("click", function () {
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle('hide');
     });
-    const nbPullRequests = counter;
-
-    const nbIssuesTotal = eventList.filter(event => event.type === 'IssuesEvent');
-    const nbIssuesOpened = nbIssuesTotal.filter(event => event.payload.action === "opened").length;
-
-    const pushEvents = eventList.filter(event => event.type === "PushEvent");
-
-    let commitsTotal = 0;
-    pushEvents.forEach(pushEvent => {
-        let commitSize = pushEvent.payload.size;
-        commitsTotal = commitSize + commitsTotal;
-    })
-
-    const config = {
-        type: 'pie',
-        data: {
-            labels: [
-                'Pull Requests',
-                'Issues Opened',
-                'Commits'],
-            datasets: [{
-                label: 'Recent Activity',
-                data: [
-                    nbPullRequests,
-                    nbIssuesOpened,
-                    commitsTotal
-                ],
-                backgroundColor: [
-                    '#71AB64',
-                    '#6663AB',
-                    '#ABA8F7'
-                ],
-                hoverOffset: 2
-            }]
-        }
-    }
-    if (activityPieChart) {
-        activityPieChart.destroy();
-    }
-    activityPieChart = new Chart(myChart, config)
-};
-
-function barChart(counts) {
-    const config = {
-        type: 'bar',
-        data: {
-            labels: Object.keys(counts),
-            datasets: [{
-                label: 'Repos per Language',
-                data: Object.values(counts),
-                backgroundColor: [
-                    '#71AB64',
-                    '#ABA8F7',
-                    '#6663AB',
-                    '#A3F78F'
-                ],
-                borderColor: [
-                    '#71AB64',
-                    '#ABA8F7',
-                    '#6663AB',
-                    '#A3F78F'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        },
-    }
-
-    if (languageBarChart) {
-        languageBarChart.destroy()
-    }
-    languageBarChart = new Chart(languageChart, config)
-}
-
-//generate a new chart every time the user clicks on a repo
-function createDoughnutChart(names, contributions) {
-    const config = {
-        type: 'doughnut',
-        data: {
-            labels: names,
-            datasets: [{
-                label: 'My First Dataset',
-                data: contributions, //num of contributions
-                backgroundColor: [
-                    '#71AB64',
-                    '#6663AB',
-                    '#A3F78F',
-                    '#ABA8F7',
-                    '#F7D5C1'
-                ],
-                hoverOffset: 4
-            }]
-        }
-    };
-
-    if (doughnutChart) {
-        doughnutChart.destroy()
-    }
-    doughnutChart = new Chart(doughnutChartCanvas, config)
-};
+});
