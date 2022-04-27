@@ -7,14 +7,8 @@ let languageBarChart;
 let doughnutChart;
 
 function createPieChart(eventList) {
-    recentActivitiyMessage.innerHTML = "";
-    if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
-        return recentActivitiyMessage.innerText = "No recent activity found :("
-    }
 
-    let lastElem = eventList.slice(-1)
-    let lastElemDate = new Date(lastElem[0].created_at);
-    recentActivityDate.innerText = `GitHub activity since ${lastElemDate.toLocaleDateString()}`
+    displayActivityDate(eventList);
 
     let counter = 0;
     eventList.forEach(event => {
@@ -22,11 +16,10 @@ function createPieChart(eventList) {
             counter++
         }
     });
-    const nbPullRequests = counter;
 
+    const nbPullRequests = counter;
     const nbIssuesTotal = eventList.filter(event => event.type === 'IssuesEvent');
     const nbIssuesOpened = nbIssuesTotal.filter(event => event.payload.action === "opened").length;
-
     const pushEvents = eventList.filter(event => event.type === "PushEvent");
 
     let commitsTotal = 0;

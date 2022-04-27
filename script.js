@@ -111,6 +111,17 @@ async function recentActivity(username) {
     createPieChart(eventsData);
 }
 
+function displayActivityDate(eventList) {
+    recentActivitiyMessage.innerHTML = "";
+    if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
+        return recentActivitiyMessage.innerText = "No recent activity found :("
+    }
+
+    let lastElem = eventList.slice(-1)
+    let lastElemDate = new Date(lastElem[0].created_at);
+    recentActivityDate.innerText = `GitHub activity since ${lastElemDate.toLocaleDateString()}`
+}
+
 async function reposPerLanguage(username) {
     const reposData = await callGithubAPI(`/users/${username}/repos?per_page=20`)
     const counts = {};
