@@ -41,8 +41,14 @@ async function callGithubAPI(apiUrl) {
     } : {};
 
     const response = await fetch('https://api.github.com' + apiUrl, options);
+    if (response.status === 404) {
+        throw new Error('User not found. Try again.');
+    }
+    if (response.status === 403) {
+        throw new Error('403 Access Forbidden. You might have to try again in an hour.');
+    }
     if (!response.ok) {
-        throw new Error('Something went wrong ' + response.status);
+        throw new Error(`Oops, something went wrong: ${response.status}.`);
     }
     return await response.json();
 }
@@ -62,9 +68,9 @@ async function searchUser(username) {
         recentActivity(username);
         showRepos(username);
     } catch (error) {
+        errorOutput.innerText = error.message;
         userInformation.classList.add('hide');
         loader.classList.add('hide');
-        errorOutput.innerText = `Can't find ${username}. Try again.`
     }
 }
 
