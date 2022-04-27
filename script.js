@@ -153,7 +153,6 @@ async function contributorsPerRepo(username, repo) {
 
 formEl.addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log(event);
     searchUser(formInputEl.value);
 
 })
