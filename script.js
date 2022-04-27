@@ -107,12 +107,23 @@ async function getStarredRepos(username) {
 }
 
 async function recentActivity(username) {
-    const eventsData = await callGithubAPI(`/users/${username}/events?per_page=100`)
+    const eventsData = await callGithubAPI(`/users/${username}/events`)
     createPieChart(eventsData);
 }
 
+function displayActivityDate(eventList) {
+    recentActivitiyMessage.innerHTML = "";
+    if (eventList === undefined || eventList.length === 0) { //clear output if eventList is empty or doesn't exist
+        return recentActivitiyMessage.innerText = "No recent activity found :("
+    }
+
+    let lastElem = eventList.slice(-1)
+    let lastElemDate = new Date(lastElem[0].created_at);
+    recentActivityDate.innerText = `GitHub activity since ${lastElemDate.toLocaleDateString()}`
+}
+
 async function reposPerLanguage(username) {
-    const reposData = await callGithubAPI(`/users/${username}/repos?per_page=20`)
+    const reposData = await callGithubAPI(`/users/${username}/repos`)
     const counts = {};
     reposData.map(repo => repo.language)
         .filter(language => language)
@@ -153,7 +164,6 @@ async function contributorsPerRepo(username, repo) {
 
 formEl.addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log(event);
     searchUser(formInputEl.value);
 
 })
