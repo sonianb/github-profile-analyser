@@ -107,7 +107,7 @@ async function getStarredRepos(username) {
 }
 
 async function recentActivity(username) {
-    const eventsData = await callGithubAPI(`/users/${username}/events?per_page=100`)
+    const eventsData = await callGithubAPI(`/users/${username}/events`)
     createPieChart(eventsData);
 }
 
@@ -123,7 +123,7 @@ function displayActivityDate(eventList) {
 }
 
 async function reposPerLanguage(username) {
-    const reposData = await callGithubAPI(`/users/${username}/repos?per_page=20`)
+    const reposData = await callGithubAPI(`/users/${username}/repos`)
     const counts = {};
     reposData.map(repo => repo.language)
         .filter(language => language)
